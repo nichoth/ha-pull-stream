@@ -18,18 +18,13 @@ function toStream (opts) {
         }))
     }
 
-    var sources = opts.actions.reduce(function (acc, name) {
+    var sources = opts.actions.concat(lifecycle).reduce(function (acc, name) {
         acc[name] = Notify()
         return acc
     }, {})
 
     Object.keys(sources).forEach(function (k) {
         source[k] = sources[k].listen
-    })
-
-    lifecycle.forEach(function (ev) {
-        var n = Notify()
-        source[ev] = n.listen
     })
 
     var actions = opts.actions.reduce(function (acc, name) {
@@ -45,7 +40,7 @@ function toStream (opts) {
 
     var _events = lifecycle.reduce(function (acc, k) {
         acc[k] = function (state) {
-            source[k](state)
+            sources[k](state)
         }
         return acc
     }, {})

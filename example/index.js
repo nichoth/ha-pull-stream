@@ -25,3 +25,9 @@ S(
     view.sink
 )
 
+S(
+    view.source.render(),
+    S.map(ev => ['render', ev]),
+    S.log()
+)
+
