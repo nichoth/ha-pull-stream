@@ -9,19 +9,19 @@ var Many = require('pull-many')
 var lifecycle = ['init', 'loaded', 'render']
 
 function toStream (opts) {
-    function source () {
-        return Many(Object.keys(source).map(function (k) {
-            return S(
-                source[k].listen(),
-                Map(function (ev) { return [k, ev] })
-            )
-        }))
-    }
-
     var sources = opts.actions.concat(lifecycle).reduce(function (acc, name) {
         acc[name] = Notify()
         return acc
     }, {})
+
+    function source () {
+        return Many(Object.keys(source).map(function (k) {
+            return S(
+                source[k](),
+                Map(function (ev) { return [k, ev] })
+            )
+        }))
+    }
 
     Object.keys(sources).forEach(function (k) {
         source[k] = sources[k].listen
